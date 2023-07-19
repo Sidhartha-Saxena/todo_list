@@ -18,7 +18,7 @@ const getTask = async (id) => {
   return response.data;
 };
 
-export default function page() {
+export default function Page() {
   const params = useParams();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -30,9 +30,6 @@ export default function page() {
       router.push("/");
     },
   });
-  if (status === "loading") {
-    return <Loading />;
-  }
   const [inputState, setInputState] = useState({
     title: "",
     dueDate: "",
@@ -44,7 +41,6 @@ export default function page() {
   const setInputs = async () => {
     const data = await getTask(params.taskId);
     data.dueDate = new Date(data.dueDate);
-    console.log(data.completed);
     setInputState({ ...data });
   };
   const handleInput = (name) => (e) => {
@@ -97,6 +93,10 @@ export default function page() {
   useEffect(() => {
     setInputs();
   }, []);
+
+  if (status === "loading") {
+    return <Loading />;
+  }
   const { title, description, tomatoes, dueDate, completed } = inputState;
   return (
     <form className="flex flex-col gap-6 w-full h-full" onSubmit={handleSubmit}>

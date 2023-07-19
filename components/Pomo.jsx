@@ -9,17 +9,16 @@ const allTasks = async () => {
 };
 
 export default function Pomo({ isVisible, onClose, data }) {
-  if (!isVisible) return null;
-
   const queryClient = useQueryClient();
-
-  const [minutes, setMinutes] = useState(25 );
+  
+  const [minutes, setMinutes] = useState(25);
   const [seconds, setSeconds] = useState(0);
   const [activeState, setActiveState] = useState(false);
   const [task, setTask] = useState("");
-  let rest = false;
-  let tomatoes = 0;
-  let session = 0;
+  const [rest,setRest]=useState(false);
+  const [tomatoes,setTomatoes] = useState(0);
+  const [session,setSession] = useState(0);
+
   const { mutate } = useMutation(async () => {
     await axios
       .put(`/api/task/updateTask/${task}`, { tomatoes: tomatoes })
@@ -42,13 +41,13 @@ export default function Pomo({ isVisible, onClose, data }) {
             setSeconds(59);
             setMinutes(minutes - 1);
           } else {
-            session += 1;
+            setSession((prevS)=>prevS+1);
             let minutes = rest ? 24 : session % 4 === 0 ? 15 : 4;
             let seconds = 59;
-            tomatoes += 1;
+            setTomatoes((prevT)=>prevT+1);
             setSeconds(seconds);
             setMinutes(minutes);
-            rest = !rest;
+            setRest((prevR)=>!prevR);
           }
         } else {
           setSeconds(seconds - 1);
@@ -68,11 +67,13 @@ export default function Pomo({ isVisible, onClose, data }) {
       onClose();
     }
   };
+  if (!isVisible) return null;
+
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center"
       id="modalWrapper"
-      onClick={(e)=>handleClose(e)}
+      onClick={(e) => handleClose(e)}
     >
       {data.length === 0 ? (
         <div className="flex gap-4 flex-col items-center justify-center border-4 border-red-600 shadow-md rounded-full p-6">
@@ -97,14 +98,17 @@ export default function Pomo({ isVisible, onClose, data }) {
           <select
             required
             value={task}
-            onChange={(e) => {setTask(e.target.value);console.log(e.target.value)}}
+            onChange={(e) => {
+              setTask(e.target.value);
+              console.log(e.target.value);
+            }}
             className="bg-[#151515] text-white rounded-md p-2"
           >
             <option value="" disabled>
               Select Task
             </option>
             {data.map((item) => {
-              return <option value={`${item.id}`}>{item.title}</option>;
+              return <option value={`${item.id}`} key={item.id}>{item.title}</option>;
             })}
           </select>
         </div>

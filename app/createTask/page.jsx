@@ -12,7 +12,7 @@ import { Home, Signout } from "@/components/navlinks";
 import { CirclePicker } from "react-color";
 import toast from "react-hot-toast";
 
-export default function page() {
+export default function Page() {
   const router = useRouter();
   const [added, setAdded] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -24,9 +24,6 @@ export default function page() {
       router.push("/");
     },
   });
-  if (status === "loading") {
-    return <Loading />;
-  }
   const [inputState, setInputState] = useState({
     title: "",
     dueDate: "",
@@ -75,6 +72,9 @@ export default function page() {
       router.push("/");
     }
   }, [added]);
+  if (status === "loading") {
+    return <Loading />;
+  }
   const { title, description, tomatoes, dueDate } = inputState;
   return (
     <>

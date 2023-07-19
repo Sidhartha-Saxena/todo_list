@@ -18,7 +18,7 @@ const allTasks = async () => {
   return response.data;
 };
 
-export default async function page() {
+export default async function Page() {
   const { status } = useSession({
     required: true,
     onUnauthenticated() {
