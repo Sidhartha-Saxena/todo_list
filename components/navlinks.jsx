@@ -17,7 +17,7 @@ export function Login() {
 }
 export function Signout() {
   return (
-    <button onClick={() => signOut()} className="anime-btn">
+    <button onClick={() => signOut({callbackUrl: "/"})} className="anime-btn">
       <div className="symbol">
         <GoSignOut />
       </div>
